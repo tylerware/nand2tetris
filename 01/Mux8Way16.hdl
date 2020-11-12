@@ -18,5 +18,10 @@ CHIP Mux8Way16 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    // Choose based on first two bits. Note there are two groupings of 4 to choose 1 out of
+    Mux4Way16(a=a,b=b,c=c,d=d,sel=sel[0..1],out=a0);
+    Mux4Way16(a=e,b=f,c=g,d=h,sel=sel[0..1],out=b0);
+
+    // Choose based on last bit
+    Mux16(a=a0,b=b0,sel=sel[2],out=out);
 }
