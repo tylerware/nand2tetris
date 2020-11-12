@@ -1,3 +1,11 @@
 #+TITLE: nand2tetris
 
+* About
 I'm working through, /The Elements of Computing Systems: Building a Modern Computer from First Principles/, which has a set of projects associated with it "Nand to Tetris". These are my results from working on those projects.
+
+* Running things
+/These aren't things you can probably run directly, but they work for me./
+** Hardware Simulator
+#+BEGIN_SRC bash
+d ../tools/HardwareSimulator.sh
+#+END_SRC
