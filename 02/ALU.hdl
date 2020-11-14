@@ -42,5 +42,38 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
+    // Make zero bus
+    Not16(in=x,out=negx);
+    Or16(a=x,b=negx,out=ones,out[0]=one); // Saving off a 'one' for later.
+    Not16(in=ones,out=zeroes);
+
+    // x - make it zero or not.. then negate or not..
+    Mux16(a=x,b=zeroes,sel=zx,out=x1);
+    Not16(in=x1,out=negx1);
+    Mux16(a=x1,b=negx1,sel=nx,out=xx);
+
+    // y - make it zero or not.. then negate or not..
+    Mux16(a=y,b=zeroes,sel=zy,out=y1);
+    Not16(in=y1,out=negy1);
+    Mux16(a=y1,b=negy1,sel=ny,out=yy);
+
+    // f
+    And16(a=xx,b=yy,out=outand);
+    Add16(a=xx,b=yy,out=outadd);
+    Mux16(a=outand,b=outadd,sel=f,out=fout);
+
+    // Output results of f, or the negation of f
+    Not16(in=fout,out=negfout);
+    Mux16(a=fout,b=negfout,sel=no,out[0..7]=outpipe1,out[8..15]=outpipe2,out[15]=outpipelast,out=out);
+    // Magic happens here --------^
+    // We can split out the outputs to multiple locations and single out individual outputs
+
+    // Zero status (Or the bits and negate)
+    Or8Way(in=outpipe1,out=outor1);
+    Or8Way(in=outpipe2,out=outor2);
+    Or(a=outor1,b=outor2,out=notzr);
+    Not(in=notzr,out=zr);
+
+    // Negative numbers have 1 in the last spot
+    And(a=outpipelast,b=one,out=ng);
 }
