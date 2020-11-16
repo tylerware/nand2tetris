@@ -15,5 +15,28 @@ CHIP RAM16K {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    Not(in=address[12],out=notadd12);
+    Not(in=address[13],out=notadd13);
+
+    // selected ram block address
+    And(a=notadd13,b=notadd12,out=selblk0);
+    And(a=notadd13,b=address[12],out=selblk1);
+    And(a=address[13],b=notadd12,out=selblk2);
+    And(a=address[13],b=address[12],out=selblk3);
+
+    // Setup ram blocks
+    And(a=selblk0,b=load,out=l0);
+    RAM4K(in=in,address=address[0..11],load=l0,out=r0);
+
+    And(a=selblk1,b=load,out=l1);
+    RAM4K(in=in,address=address[0..11],load=l1,out=r1);
+
+    And(a=selblk2,b=load,out=l2);
+    RAM4K(in=in,address=address[0..11],load=l2,out=r2);
+
+    And(a=selblk3,b=load,out=l3);
+    RAM4K(in=in,address=address[0..11],load=l3,out=r3);
+
+    // Send out right output
+    Mux4Way16(a=r0,b=r1,c=r2,d=r3,sel=address[12..13],out=out);
 }

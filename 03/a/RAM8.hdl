@@ -15,5 +15,56 @@ CHIP RAM8 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    // Help select the right spots
+    Not(in=address[0],out=notadd0);
+    Not(in=address[1],out=notadd1);
+    Not(in=address[2],out=notadd2);
+
+    // selected address
+    And(a=notadd2,b=notadd1,out=block00);
+    And(a=block00,b=notadd0,out=seladd0);
+    And(a=block00,b=address[0],out=seladd1);
+
+    And(a=notadd2,b=address[1],out=block01);
+    And(a=block01,b=notadd0,out=seladd2);
+    And(a=block01,b=address[0],out=seladd3);
+
+    And(a=address[2],b=notadd1,out=block10);
+    And(a=block10,b=notadd0,out=seladd4);
+    And(a=block10,b=address[0],out=seladd5);
+
+    And(a=address[2],b=address[1],out=block11);
+    And(a=block11,b=notadd0,out=seladd6);
+    And(a=block11,b=address[0],out=seladd7);
+
+
+    // Setup registers
+    And(a=seladd0,b=load,out=l0);
+    Register(in=in,load=l0,out=r0);
+
+    And(a=seladd1,b=load,out=l1);
+    Register(in=in,load=l1,out=r1);
+
+    And(a=seladd2,b=load,out=l2);
+    Register(in=in,load=l2,out=r2);
+
+    And(a=seladd3,b=load,out=l3);
+    Register(in=in,load=l3,out=r3);
+
+    And(a=seladd4,b=load,out=l4);
+    Register(in=in,load=l4,out=r4);
+
+    And(a=seladd5,b=load,out=l5);
+    Register(in=in,load=l5,out=r5);
+
+    And(a=seladd6,b=load,out=l6);
+    Register(in=in,load=l6,out=r6);
+
+    And(a=seladd7,b=load,out=l7);
+    Register(in=in,load=l7,out=r7);
+
+    // Probably a more effiecient implementation either here or above ^
+    // we are doing the same logic to select the right address in both
+    // for my purposes I think it's enough to note that it could be improved
+    Mux8Way16(a=r0,b=r1,c=r2,d=r3,e=r4,f=r5,g=r6,h=r7,sel=address,out=out);
 }

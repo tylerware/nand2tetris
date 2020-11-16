@@ -15,5 +15,52 @@ CHIP RAM512 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    Not(in=address[6],out=notadd6);
+    Not(in=address[7],out=notadd7);
+    Not(in=address[8],out=notadd8);
+
+    // selected ram block address
+    And(a=notadd8,b=notadd7,out=block00);
+    And(a=block00,b=notadd6,out=selblk0);
+    And(a=block00,b=address[6],out=selblk1);
+
+    And(a=notadd8,b=address[7],out=block01);
+    And(a=block01,b=notadd6,out=selblk2);
+    And(a=block01,b=address[6],out=selblk3);
+
+    And(a=address[8],b=notadd7,out=block10);
+    And(a=block10,b=notadd6,out=selblk4);
+    And(a=block10,b=address[6],out=selblk5);
+
+    And(a=address[8],b=address[7],out=block11);
+    And(a=block11,b=notadd6,out=selblk6);
+    And(a=block11,b=address[6],out=selblk7);
+
+    // Setup ram blocks
+    And(a=selblk0,b=load,out=l0);
+    RAM64(in=in,address=address[0..5],load=l0,out=r0);
+
+    And(a=selblk1,b=load,out=l1);
+    RAM64(in=in,address=address[0..5],load=l1,out=r1);
+
+    And(a=selblk2,b=load,out=l2);
+    RAM64(in=in,address=address[0..5],load=l2,out=r2);
+
+    And(a=selblk3,b=load,out=l3);
+    RAM64(in=in,address=address[0..5],load=l3,out=r3);
+
+    And(a=selblk4,b=load,out=l4);
+    RAM64(in=in,address=address[0..5],load=l4,out=r4);
+
+    And(a=selblk5,b=load,out=l5);
+    RAM64(in=in,address=address[0..5],load=l5,out=r5);
+
+    And(a=selblk6,b=load,out=l6);
+    RAM64(in=in,address=address[0..5],load=l6,out=r6);
+
+    And(a=selblk7,b=load,out=l7);
+    RAM64(in=in,address=address[0..5],load=l7,out=r7);
+
+    // Send out right output
+    Mux8Way16(a=r0,b=r1,c=r2,d=r3,e=r4,f=r5,g=r6,h=r7,sel=address[6..8],out=out);
 }
