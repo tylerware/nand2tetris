@@ -4,8 +4,21 @@
 I'm working through, /The Elements of Computing Systems: Building a Modern Computer from First Principles/, which has a set of projects associated with it "Nand to Tetris". These are my results from working on those projects.
 
 * Running things
+:PROPERTIES:
+:header-args: :dir ../tools :results none
+:END:
 /These aren't things you can probably run directly, but they work for me./
 ** Hardware Simulator
 #+BEGIN_SRC bash
-d ../tools/HardwareSimulator.sh
+./HardwareSimulator.sh
+#+END_SRC
+
+** Assembler
+#+BEGIN_SRC bash
+./Assembler.sh
+#+END_SRC
+
+** CPU Emulator
+#+BEGIN_SRC bash
+./CPUEmulator.sh
 #+END_SRC
